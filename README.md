@@ -24,7 +24,7 @@ Use virutal envelope
 . venv/bin/activate
 ```
 
-Which I learned is equal to
+which I learned is equal to
 
 ```
 source venv/bin/activate
