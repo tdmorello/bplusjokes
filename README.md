@@ -18,16 +18,16 @@ Give examples
 
 A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
+Use virutal envelope
 
 ```
-Give the example
+. venv/bin/activate
 ```
 
-And repeat
+or install requirements to system
 
 ```
-until finished
+pip3 install -r requirements.txt
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
