@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-This project is deveveloped in Python 3.7. Any "python" or "pip" commands are assumed to be Python 3.7.
+This project is deveveloped in Python 3.7. Any "python" or "pip" commands are **assumed to be Python 3.7**.
 
 ```
 Give examples
