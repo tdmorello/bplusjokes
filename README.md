@@ -56,6 +56,13 @@ Give an example
 
 Add additional notes about how to deploy this on a live system
 
+## To Do
+
+* Make private email adress
+* Create relational database
+* Gather subscriber feedback on jokes
+* Deploy raspberry pi to run program daily
+
 ## Built With
 
 * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
