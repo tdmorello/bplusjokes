@@ -61,6 +61,8 @@ Add additional notes about how to deploy this on a live system
 * Make private email adress
 * Create relational database
 * Gather subscriber feedback on jokes
+* Add a cute animal photo to emails
+* Add a texting service through Twilio
 * Deploy raspberry pi to run program daily
 
 ## Built With
