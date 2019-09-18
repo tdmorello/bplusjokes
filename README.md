@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+This project is deveveloped in Python 3.7. Any "python" or "pip" commands are assumed to be Python 3.7.
 
 ```
 Give examples
@@ -27,7 +27,7 @@ Use virutal envelope
 or install requirements to system
 
 ```
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
