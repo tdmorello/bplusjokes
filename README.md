@@ -24,6 +24,12 @@ Use virutal envelope
 . venv/bin/activate
 ```
 
+Which I learned is equal to
+
+```
+source venv/bin/activate
+```
+
 or install requirements to system
 
 ```
