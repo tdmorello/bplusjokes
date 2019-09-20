@@ -7,58 +7,24 @@ import logging
 import sys
 
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(message)s')
 
 # TODO:
-# Abstract get_X(csv_file) into a parent function for jokes and contacts
 # Add check that every joke has a send-date
 
-def get_jokes(csv_file):
-  """Retrieve jokes from a csv file"""
-  logging.debug(f"Getting jokes from {csv_file}")
+def get_csv_content(csv_file):
+  """Create ordered dictionary from a csv file content"""
+  logging.debug(f"Getting content from {csv_file}")
   try:
-    with open(csv_file) as f:
-      reader = csv.reader(f)
-      header = next(reader) # assume there is a header
-      jokes_data = list(reader)
-      logging.debug(f"Found {len(jokes_data)} jokes in {csv_file}!")
-
-      # this next part should be in a try block to address improperly entered data
-      jokes = []
-      for joke_row in jokes_data:
-        send_date = joke_row[0]
-        setup = joke_row[1]
-        punchline = joke_row[2]
-        logging.debug(f'Adding joke with setup {setup}')
-        jokes.append({'send_date':send_date, 'setup':setup, 'punchline':punchline})
-      return jokes
-
-  except IOError:
-    logging.error(f'There is something wrong with the input file: {csv_file}')
-
-
-def get_contacts(csv_file):
-  """Get contacts from a csv file"""
-  logging.debug(f"Getting contacts from {csv_file}")
-  try:
-    with open(csv_file) as f:
-      reader = csv.reader(f)
-      next(reader) # assume there is a header
-      contacts_data = list(reader)
-      logging.debug(f"Found {len(contacts_data)} contacts in {csv_file}")
-
-      # this next part should be in a try block to address improperly entered data
-      contacts = []
-      for contact_row in contacts_data:
-        name = contact_row[0]
-        email = contact_row[1]
-        logging.debug(f'Adding {name}, {email}')
-        contacts.append({'name':name, 'email':email})
-      return contacts
-
-  except IOError:
-    logging.error(f'There is something wrong with the input file: {csv_file}')
-
+    with open(csv_file, encoding='utf-8-sig') as csvfile:
+      reader = csv.DictReader(csvfile)
+      data = []
+      for row in reader:
+        data.append(row)
+      logging.debug(f"Found {len(data)} entries in {csv_file}")
+      return data
+  except IOError as e:
+    logging.error(msg = e)
 
 def find_todays_joke(jokes):
   logging.debug("Finding today's joke.")
@@ -72,15 +38,9 @@ def find_todays_joke(jokes):
   logging.error("No jokes for today were found.")
   sys.exit()
 
-
-def create_content_body(name = None, p1 = None, p2 = None, greeting = None, farewell = None):
+def create_body_content(name = None, p1 = None, p2 = None, greeting = None, farewell = None):
   # TODO: fill this in
   return None
-
-def send_joke(recipient_name, recipient_email):
-  # TODO: fill this in
-  return None
-
 
 def main():
   # Server connection info
@@ -88,13 +48,15 @@ def main():
   sender_name = "B+ Jokes"
   password = "epcjxgyzlmijdyui"
 
-  jokes = get_jokes("dog_jokes.csv")
+  # Prepare joke
+  jokes = get_csv_content("dog_jokes.csv")
   todays_joke = find_todays_joke(jokes)
 
   joke_setup = todays_joke['setup']
   joke_punchline = todays_joke['punchline']
 
-  contacts = get_contacts("contacts.csv")
+  # Prepare contacts
+  contacts = get_csv_content("contacts.csv")
 
   for contact in contacts:
     recipient_name = contact['name']
@@ -146,7 +108,7 @@ def main():
       server.sendmail(
           sender_email, recipient_email, message.as_string()
       )
-    logging.info(f'Email to {recipient_name} was sent.')
+    logging.debug(f'Email to {recipient_name} was sent.')
 
   return None
 
