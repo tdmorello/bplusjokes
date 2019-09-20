@@ -54,6 +54,7 @@ def main():
     start_date = datetime.date(2019, 9, 15)
     
     count = 0
+    jokes.append(['send_date','setup','punchline'])
     for ptag in content.findAll('p')[1:]: # the first tag is not part of a joke
         if (ptag.text[0] == 'Q'):
             joke_date = start_date + datetime.timedelta(count)
