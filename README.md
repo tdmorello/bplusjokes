@@ -56,6 +56,9 @@ Add additional notes about how to deploy this on a live system
 * Add a cute animal photo to emails
 * Add a texting service through Twilio
 * Deploy raspberry pi to run program daily
+* Give each person a randomly assigned gamer tag and catch phrase
+* Find a better way to work with contact files
+* Add the weather forecast high
 
 ## Built With
 
