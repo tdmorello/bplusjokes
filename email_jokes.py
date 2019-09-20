@@ -3,46 +3,119 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import csv
 import datetime
+import logging
+import sys
 
-sender_email = "bplusjokes@gmail.com"
-sender_name = "B+ Jokes"
-# receiver_email = "tdmorello@gmail.com"
-password = "epcjxgyzlmijdyui"
 
-today = datetime.date.today()
+logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 
-with open("dog_jokes.csv") as file:
-  reader = csv.reader(file)
-  jokes = list(reader)
+# TODO:
+# Abstract get_X(csv_file) into a parent function for jokes and contacts
+# Add check that every joke has a send-date
 
-todays_joke = []
-for entry in jokes:
-  entry_date = datetime.datetime.strptime(entry[0], '%Y-%m-%d').date()
-  if entry_date == today:
-    todays_joke = entry[1:3]
-    print(f"Today's joke is: {todays_joke}")
-    break
+def get_jokes(csv_file):
+  """Retrieve jokes from a csv file"""
+  logging.debug(f"Getting jokes from {csv_file}")
+  try:
+    with open(csv_file) as f:
+      reader = csv.reader(f)
+      header = next(reader) # assume there is a header
+      jokes_data = list(reader)
+      logging.debug(f"Found {len(jokes_data)} jokes in {csv_file}!")
 
-with open("contacts_file.csv") as file:
-  reader = csv.reader(file)
-  for recipient_name, receiver_email in reader:
-    print(f"Sending email to {recipient_name} at {receiver_email}")
+      # this next part should be in a try block to address improperly entered data
+      jokes = []
+      for joke_row in jokes_data:
+        send_date = joke_row[0]
+        setup = joke_row[1]
+        punchline = joke_row[2]
+        logging.debug(f'Adding joke with setup {setup}')
+        jokes.append({'send_date':send_date, 'setup':setup, 'punchline':punchline})
+      return jokes
 
-    subject = f'J of the D: {todays_joke[0]}'
+  except IOError:
+    logging.error(f'There is something wrong with the input file: {csv_file}')
 
+
+def get_contacts(csv_file):
+  """Get contacts from a csv file"""
+  logging.debug(f"Getting contacts from {csv_file}")
+  try:
+    with open(csv_file) as f:
+      reader = csv.reader(f)
+      next(reader) # assume there is a header
+      contacts_data = list(reader)
+      logging.debug(f"Found {len(contacts_data)} contacts in {csv_file}")
+
+      # this next part should be in a try block to address improperly entered data
+      contacts = []
+      for contact_row in contacts_data:
+        name = contact_row[0]
+        email = contact_row[1]
+        logging.debug(f'Adding {name}, {email}')
+        contacts.append({'name':name, 'email':email})
+      return contacts
+
+  except IOError:
+    logging.error(f'There is something wrong with the input file: {csv_file}')
+
+
+def find_todays_joke(jokes):
+  logging.debug("Finding today's joke.")
+  for joke in jokes:
+    entry_date = datetime.datetime.strptime(joke['send_date'], '%Y-%m-%d').date()
+    if entry_date == datetime.date.today():
+      logging.debug("Found today's joke.")
+      logging.info(f"Today's joke is: {joke}")
+      return joke
+  
+  logging.error("No jokes for today were found.")
+  sys.exit()
+
+
+def create_content_body(name = None, p1 = None, p2 = None, greeting = None, farewell = None):
+  # TODO: fill this in
+  return None
+
+def send_joke(recipient_name, recipient_email):
+  # TODO: fill this in
+  return None
+
+
+def main():
+  # Server connection info
+  sender_email = "bplusjokes@gmail.com"
+  sender_name = "B+ Jokes"
+  password = "epcjxgyzlmijdyui"
+
+  jokes = get_jokes("dog_jokes.csv")
+  todays_joke = find_todays_joke(jokes)
+
+  joke_setup = todays_joke['setup']
+  joke_punchline = todays_joke['punchline']
+
+  contacts = get_contacts("contacts.csv")
+
+  for contact in contacts:
+    recipient_name = contact['name']
+    recipient_email = contact['email']
+
+    logging.info(f"Sending email to {recipient_name} at {recipient_email}")
+
+    # MESSAGE
     message = MIMEMultipart("alternative")
-    message["Subject"] = subject
+    message["Subject"] = f'J of the D: {joke_setup}'
     message["From"] = sender_name + ' <' + sender_email + '>'
-    message["To"] = receiver_email
+    message["To"] = recipient_email
 
     # Create the plain-text and HTML version of your message
     text = f"""\
     Good day {recipient_name},
     Here's your dog joke of the day!
 
-    {todays_joke[0]}
+    {joke_setup}
 
-    {todays_joke[1]}
+    {joke_punchline}
     """
 
     html = f"""\
@@ -50,8 +123,8 @@ with open("contacts_file.csv") as file:
       <body>
         <p>Good day {recipient_name},<br>
           Here's your dog joke of the day!<br><br>
-          <strong>{todays_joke[0]}</strong><br><br>
-          <i>{todays_joke[1]}</i>
+          <strong>{joke_setup}</strong><br><br>
+          <i>{joke_punchline}</i>
         </p>
       </body>
     </html>
@@ -71,5 +144,11 @@ with open("contacts_file.csv") as file:
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
       server.login(sender_email, password)
       server.sendmail(
-          sender_email, receiver_email, message.as_string()
+          sender_email, recipient_email, message.as_string()
       )
+    logging.info(f'Email to {recipient_name} was sent.')
+
+  return None
+
+if __name__ == '__main__':
+    main()
