@@ -12,7 +12,7 @@ This project is deveveloped in Python 3.7. Any "python" or "pip" commands are **
 
 ### Installing
 
-Use virutal envelope
+Use virtual envelope
 
 ```
 source venv/bin/activate
