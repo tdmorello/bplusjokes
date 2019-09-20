@@ -3,6 +3,7 @@ from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
 import csv
+import datetime
 
 
 def simple_get(url):
@@ -41,17 +42,24 @@ def log_error(e):
     """
     print(e)
 
-
-if __name__ == '__main__':
+def main():
     target_url = "https://www.care.com/c/stories/7403/the-40-funniest-dog-jokes-for-kids-of-all-age/"
     raw_html = simple_get(target_url)
     soup = BeautifulSoup(raw_html, 'html.parser') 
     content = soup.find('div', class_='content')  
     jokes = []
     joke = []
+
+    # Date first joke should be sent out
+    start_date = datetime.date(2019, 9, 15)
+    
+    count = 0
     for ptag in content.findAll('p')[1:]: # the first tag is not part of a joke
         if (ptag.text[0] == 'Q'):
+            joke_date = start_date + datetime.timedelta(count)
+            count += 1
             question = ptag.text[3:]
+            joke.append(joke_date)
             joke.append(question)
         if (ptag.text[0] == 'A'):
             answer = ptag.text[3:]
@@ -62,3 +70,7 @@ if __name__ == '__main__':
      wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
      for j in jokes:
         wr.writerow(j)
+
+
+if __name__ == '__main__':
+    main()
