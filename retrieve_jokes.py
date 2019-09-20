@@ -4,6 +4,8 @@ from contextlib import closing
 from bs4 import BeautifulSoup
 import csv
 import datetime
+import sys
+from pathlib import Path
 
 
 def simple_get(url):
@@ -47,6 +49,8 @@ def main():
     raw_html = simple_get(target_url)
     soup = BeautifulSoup(raw_html, 'html.parser') 
     content = soup.find('div', class_='content')  
+    
+    jokes_filename = 'dog_jokes.csv'
     jokes = []
     joke = []
 
@@ -67,7 +71,14 @@ def main():
             joke.append(answer)
             jokes.append(joke)
             joke = []
-    with open('dog_jokes.csv', 'w', newline='') as myfile:
+    
+    if Path(jokes_filename).exists():
+        overwrite = input(f'{jokes_filename} already exists. Overwrite? y or n [n]\n')
+        if overwrite == 'y':
+            pass
+        else:
+            sys.exit()
+    with open(jokes_filename, 'w', newline='') as myfile:
      wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
      for j in jokes:
         wr.writerow(j)

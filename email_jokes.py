@@ -10,7 +10,7 @@ import sys
 logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(message)s')
 
 # TODO:
-# Add check that every joke has a send-date
+# Add a check that every joke has a send-date
 
 def get_csv_content(csv_file):
   """Create ordered dictionary from a csv file content"""
@@ -58,6 +58,8 @@ def main():
   # Prepare contacts
   contacts = get_csv_content("contacts.csv")
 
+
+  # Send mail
   for contact in contacts:
     recipient_name = contact['name']
     recipient_email = contact['email']
@@ -73,6 +75,7 @@ def main():
     # Create the plain-text and HTML version of your message
     text = f"""\
     Good day {recipient_name},
+    Thank you for your irreversible subscription to Dog Joke of the Day.
     Here's your dog joke of the day!
 
     {joke_setup}
