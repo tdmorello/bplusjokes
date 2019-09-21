@@ -6,6 +6,8 @@ import datetime
 import logging
 import sys
 
+import get_random_slogan
+
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(message)s')
 
