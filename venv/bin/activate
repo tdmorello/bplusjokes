@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/timmorello/Programming/b-plus-jokes/venv"
+VIRTUAL_ENV="/Users/timmorello/Development/bplusjokes/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

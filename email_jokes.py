@@ -86,7 +86,8 @@ def main():
     html = f"""\
     <html>
       <body>
-        <p>Good day {recipient_name},<br>
+        <p>Good day {recipient_name},<br><br>
+          Thank you for your irreversible subscription to Dog Joke of the Day.<br>
           Here's your dog joke of the day!<br><br>
           <strong>{joke_setup}</strong><br><br>
           <i>{joke_punchline}</i>
