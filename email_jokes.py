@@ -6,7 +6,8 @@ import datetime
 import logging
 import sys
 
-import get_random_slogan
+from get_random_slogan import get_random_slogan
+from get_random_content import get_random_noun
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(message)s')
@@ -93,6 +94,10 @@ def main():
           Here's your dog joke of the day!<br><br>
           <strong>{joke_setup}</strong><br><br>
           <i>{joke_punchline}</i>
+        </p><br><br>
+        <p>
+          Looking to start a new business? Consider this slogan!<br><br>
+          <b>{get_random_slogan(get_random_noun())}</b>
         </p>
       </body>
     </html>

@@ -1,5 +1,7 @@
 import mechanicalsoup
 from bs4 import BeautifulSoup
+from get_random_content import get_random_nouns, get_random_words, get_random_things
+import random
 
 def get_random_slogan(search_term):
     """Returns a list of slogans from a given term using shopify's slogan maker"""
@@ -18,5 +20,6 @@ def get_random_slogan(search_term):
     slogans = []
     for slogan in content.findAll('button'):
         slogans.append(slogan.text.strip())
-    
-    return slogans
+
+    random_slogan = random.choice(slogans)
+    return random_slogan
