@@ -9,7 +9,6 @@ import sys
 from get_random_slogan import get_random_slogan
 from get_random_content import get_random_noun
 
-
 logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(message)s')
 
 # TODO:
@@ -91,12 +90,16 @@ def main():
       <body>
         <p>Good day {recipient_name},<br><br>
           Thank you for your irreversible subscription to Dog Joke of the Day.<br>
-          Here's your dog joke of the day!<br><br>
-          <strong>{joke_setup}</strong><br><br>
-          <i>{joke_punchline}</i>
-        </p><br><br>
+          Here's your dog joke of the day!
+        </p>
+        <br>
         <p>
-          Looking to start a new business? Consider this slogan!<br><br>
+          <strong>{joke_setup}</strong><br>
+          <i>{joke_punchline}</i>
+        </p>
+        <br>
+        <p>
+          Looking to start a new business? Consider this slogan!<br>
           <b>{get_random_slogan(get_random_noun())}</b>
         </p>
       </body>
