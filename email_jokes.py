@@ -40,10 +40,6 @@ def find_todays_joke(jokes):
   logging.error("No jokes for today were found.")
   sys.exit()
 
-def create_body_content(name = None, p1 = None, p2 = None, greeting = None, farewell = None):
-  # TODO: fill this in
-  return None
-
 def main():
   # Server connection info
   sender_email = "bplusjokes@gmail.com"
@@ -70,7 +66,7 @@ def main():
 
     # MESSAGE
     message = MIMEMultipart("alternative")
-    message["Subject"] = f'J of the D: {joke_setup}'
+    message["Subject"] = f'J of the Day: {joke_setup}'
     message["From"] = sender_name + ' <' + sender_email + '>'
     message["To"] = recipient_email
 
@@ -81,8 +77,10 @@ def main():
     Here's your dog joke of the day!
 
     {joke_setup}
-
     {joke_punchline}
+
+    Looking to start a new business? Consider this slogan!<br>
+    {get_random_slogan(get_random_noun())}
     """
 
     html = f"""\
@@ -93,15 +91,21 @@ def main():
           Here's your dog joke of the day!
         </p>
         <br>
+        <h1>#JokeSection</h1>
         <p>
-          <strong>{joke_setup}</strong><br>
+          <strong>{joke_setup}</strong><br><br>
           <i>{joke_punchline}</i>
         </p>
         <br>
+        <h1>#BusinessSection</h1>
         <p>
-          Looking to start a new business? Consider this slogan!<br>
+          Looking to start a new business? Consider this slogan!<br><br>
           <b>{get_random_slogan(get_random_noun())}</b>
         </p>
+        <br><br>
+        <p>
+          Already have a Dog Joke of the Day provider?
+          <a href="https://www.google.com/search?q=how+to+unsubscribe+from+dog+joke+of+the+day">Click here to unsubscribe</a>
       </body>
     </html>
     """
@@ -127,4 +131,4 @@ def main():
   return None
 
 if __name__ == '__main__':
-    main()
+    main()  

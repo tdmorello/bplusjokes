@@ -59,7 +59,6 @@ Add additional notes about how to deploy this on a live system
 * Give each person a randomly assigned gamer tag and catch phrase
 * Find a better way to work with contact files
 * Add the weather forecast high
-* Add a random catch phrase of the day
 
 ## Built With
 
