@@ -24,6 +24,13 @@ or install requirements to system
 pip install -r requirements.txt
 ```
 
+or build the docker image
+
+```
+git clone https://github.com/tdmorello/bplusjokes.git && cd bplusjokes
+docker build . -t bplusjokes
+```
+
 ## Running the tests
 
 Explain how to run the automated tests for this system
