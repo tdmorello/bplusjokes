@@ -5,6 +5,7 @@ import csv
 import datetime
 import logging
 import sys
+import argparse
 
 from get_random_slogan import get_random_slogan
 from get_random_content import get_random_noun
@@ -12,7 +13,9 @@ from get_random_content import get_random_noun
 logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(message)s')
 
 # TODO:
+# If there's no internet connect, try again in a little bit
 # Add a check that every joke has a send-date
+
 
 def get_csv_content(csv_file):
   """Create ordered dictionary from a csv file content"""
@@ -41,6 +44,19 @@ def find_todays_joke(jokes):
   sys.exit()
 
 def main():
+  # Get args
+  parser = argparse.ArgumentParser()
+  # With default choice
+  parser.add_argument('-m', '--runmode', default='test', choices=['test','dry','real'],
+                      help='mode to run the script (default is test run)')
+
+  # Without default choice
+  # parser.add_argument('runmode', type=str, choices=['test','dry','real'],
+  #                     help='mode to run the script (default is test run)')
+  args = parser.parse_args()
+  runmode = args.runmode
+  logging.info(f'This is a {runmode} run')
+  
   # Server connection info
   sender_email = "bplusjokes@gmail.com"
   sender_name = "B+ Jokes"
@@ -54,13 +70,21 @@ def main():
   joke_punchline = todays_joke['punchline']
 
   # Prepare contacts
-  contacts = get_csv_content("contacts.csv")
-
+  if runmode == 'test':
+    contacts = get_csv_content("contacts_test.csv")
+  else:
+    contacts = get_csv_content("contacts.csv")
 
   # Send mail
   for contact in contacts:
     recipient_name = contact['name']
     recipient_email = contact['email']
+    
+    if recipient_email == False:
+      logging.error(f'Contact email for {recipient_name} cannot be blank')
+      pass
+    else:
+      recipient_email = contact['email']
 
     logging.info(f"Sending email to {recipient_name} at {recipient_email}")
 
@@ -118,9 +142,11 @@ def main():
     # The email client will try to render the last part first
     message.attach(part1)
     message.attach(part2)
-
+    
+    if runmode == 'dry':
+      continue
+    # Create secure connection with server and send email
     try:
-      # Create secure connection with server and send email
       context = ssl.create_default_context()
       with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
         server.login(sender_email, password)
@@ -129,8 +155,7 @@ def main():
         )
       logging.debug(f'Email to {recipient_name} was sent.')
     except smtplib.SMTPRecipientsRefused as e:
-      # TODO: add check for email format and not empty string
-      logging.error(f'RecipientsRefused: {recipient_email}: {e}')
+      logging.error(f'RecipientsRefused: {recipient_name}: {e}')
 
   return None
 
