@@ -7,7 +7,7 @@ def get_random_slogan(search_term):
     """Returns a list of slogans from a given term using shopify's slogan maker"""
     
     # Submit form on website
-    browser = mechanicalsoup.StatefulBrowser()
+    browser = mechanicalsoup.StatefulBrowser(soup_config={'features': 'html.parser'})
     browser.open('https://www.shopify.com/tools/slogan-maker')
     browser.select_form('form[action="/tools/slogan-maker/create"]')
     browser['term'] = search_term
@@ -23,3 +23,6 @@ def get_random_slogan(search_term):
 
     random_slogan = random.choice(slogans)
     return random_slogan
+
+if __name__ == '__main__':
+    print(get_random_slogan(get_random_nouns()))
