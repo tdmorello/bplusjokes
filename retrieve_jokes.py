@@ -7,6 +7,8 @@ import datetime
 import sys
 from pathlib import Path
 
+# TODO:
+# - Add a check that every joke has a send-date
 
 def simple_get(url):
     """

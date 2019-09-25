@@ -13,8 +13,9 @@ from get_random_content import get_random_noun
 logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(message)s')
 
 # TODO:
-# If there's no internet connect, try again in a little bit
-# Add a check that every joke has a send-date
+# - If there's no internet connection, try again in a little bit
+# - Add a check that every joke has a send-date
+# - Add logging verbosity
 
 
 def get_csv_content(csv_file):
@@ -37,9 +38,8 @@ def find_todays_joke(jokes):
     entry_date = datetime.datetime.strptime(joke['send_date'], '%Y-%m-%d').date()
     if entry_date == datetime.date.today():
       logging.debug("Found today's joke.")
-      logging.info(f"Today's joke is: {joke}")
+      logging.info(f"Today's joke is: {joke['setup']} {joke['punchline']}")
       return joke
-  
   logging.error("No jokes for today were found.")
   sys.exit()
 
@@ -49,13 +49,9 @@ def main():
   # With default choice
   parser.add_argument('-m', '--runmode', default='test', choices=['test','dry','real'],
                       help='mode to run the script (default is test run)')
-
-  # Without default choice
-  # parser.add_argument('runmode', type=str, choices=['test','dry','real'],
-  #                     help='mode to run the script (default is test run)')
   args = parser.parse_args()
   runmode = args.runmode
-  logging.info(f'This is a {runmode} run')
+  logging.debug(f'This is a {runmode.upper()} run.')
   
   # Server connection info
   sender_email = "bplusjokes@gmail.com"
@@ -65,7 +61,6 @@ def main():
   # Prepare joke
   jokes = get_csv_content("dog_jokes.csv")
   todays_joke = find_todays_joke(jokes)
-
   joke_setup = todays_joke['setup']
   joke_punchline = todays_joke['punchline']
 
@@ -76,13 +71,14 @@ def main():
     contacts = get_csv_content("contacts.csv")
 
   # Send mail
+  
   for contact in contacts:
     recipient_name = contact['name']
     recipient_email = contact['email']
     
-    if recipient_email == False:
-      logging.error(f'Contact email for {recipient_name} cannot be blank')
-      pass
+    if recipient_email == '':
+      logging.error(f'Contact email for {recipient_name} cannot be blank. Skipping...')
+      continue
     else:
       recipient_email = contact['email']
 
