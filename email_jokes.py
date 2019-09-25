@@ -119,14 +119,18 @@ def main():
     message.attach(part1)
     message.attach(part2)
 
-    # Create secure connection with server and send email
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-      server.login(sender_email, password)
-      server.sendmail(
-          sender_email, recipient_email, message.as_string()
-      )
-    logging.debug(f'Email to {recipient_name} was sent.')
+    try:
+      # Create secure connection with server and send email
+      context = ssl.create_default_context()
+      with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(
+            sender_email, recipient_email, message.as_string()
+        )
+      logging.debug(f'Email to {recipient_name} was sent.')
+    except smtplib.SMTPRecipientsRefused as e:
+      # TODO: add check for email format and not empty string
+      logging.error(f'RecipientsRefused: {recipient_email}: {e}')
 
   return None
 
