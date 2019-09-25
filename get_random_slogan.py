@@ -4,7 +4,7 @@ from get_random_content import get_random_nouns, get_random_words, get_random_th
 import random
 import requests
 import logging
-import time
+from time import sleep
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
 
@@ -16,7 +16,7 @@ def check_connection(url):
             requests.get(url)
         except requests.exceptions.ConnectionError as e:
             logging.error(f'Cannot connect to {url}: {e}. Trying again in 5s.')
-            time.sleep(5)
+            sleep(5)
             pass
     return None
 
