@@ -55,7 +55,7 @@ def main():
     joke = []
 
     # Date first joke should be sent out
-    start_date = datetime.date(2019, 9, 15)
+    start_date = datetime.date(2019, 9, 25)
     
     count = 0
     jokes.append(['send_date','setup','punchline'])
