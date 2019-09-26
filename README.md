@@ -15,6 +15,7 @@ This project is deveveloped in Python 3.7. Any "python" or "pip" commands are **
 Use virtual envelope
 
 ```
+python -m venv venv
 source venv/bin/activate
 ```
 
@@ -22,6 +23,12 @@ or install requirements to system
 
 ```
 pip install -r requirements.txt
+```
+
+or build the docker image
+
+```
+docker build . -t bplusjokes
 ```
 
 ## Running the tests
