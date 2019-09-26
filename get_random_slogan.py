@@ -3,21 +3,26 @@ from bs4 import BeautifulSoup
 from get_random_content import get_random_nouns, get_random_words, get_random_things
 import random
 import requests
-import logging
 from time import sleep
 
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
 
+import logging
+logger = logging.getLogger(__name__)
 
 def check_connection(url):
-    good_connection = False
-    while good_connection == False:
+    logger.debug(f'Checking connection to {url}')
+    while 69 == 69:
         try:
-            requests.get(url)
+            resp = requests.get(url)
         except requests.exceptions.ConnectionError as e:
-            logging.error(f'Cannot connect to {url}: {e}. Trying again in 5s.')
+            logger.error(f'Cannot connect to {url}: {e}. Trying again in 5s.')
             sleep(5)
             pass
+        if resp.status_code == 200:
+            break
+        else:
+            logger.debug(f'Did not get 200 response. Trying agin in 5s.')
+            sleep(5)
     return None
 
 def get_random_slogan(search_term):

@@ -10,7 +10,9 @@ import argparse
 from get_random_slogan import get_random_slogan
 from get_random_content import get_random_noun
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s : %(levelname)s : %(message)s')
+
+logger = logging.getLogger(__name__)
 
 # TODO:
 # - If there's no internet connection, try again in a little bit
@@ -20,27 +22,27 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(
 
 def get_csv_content(csv_file):
   """Create ordered dictionary from a csv file content"""
-  logging.debug(f"Getting content from {csv_file}")
+  logger.debug(f"Getting content from {csv_file}")
   try:
     with open(csv_file, encoding='utf-8-sig') as csvfile:
       reader = csv.DictReader(csvfile)
       data = []
       for row in reader:
         data.append(row)
-      logging.debug(f"Found {len(data)} entries in {csv_file}")
+      logger.debug(f"Found {len(data)} entries in {csv_file}")
       return data
   except IOError as e:
-    logging.error(msg = e)
+    logger.error(msg = e)
 
 def find_todays_joke(jokes):
-  logging.debug("Finding today's joke.")
+  logger.debug("Finding today's joke.")
   for joke in jokes:
     entry_date = datetime.datetime.strptime(joke['send_date'], '%Y-%m-%d').date()
     if entry_date == datetime.date.today():
-      logging.debug("Found today's joke.")
-      logging.info(f"Today's joke is: {joke['setup']} {joke['punchline']}")
+      logger.debug("Found today's joke.")
+      logger.info(f"Today's joke is: {joke['setup']} {joke['punchline']}")
       return joke
-  logging.error("No jokes for today were found.")
+  logger.error("No jokes for today were found.")
   sys.exit()
 
 def main():
@@ -51,7 +53,7 @@ def main():
                       help='mode to run the script (default is test run)')
   args = parser.parse_args()
   runmode = args.runmode
-  logging.debug(f'This is a {runmode.upper()} run.')
+  logger.debug(f'This is a {runmode.upper()} run.')
   
   # Server connection info
   sender_email = "bplusjokes@gmail.com"
@@ -77,12 +79,12 @@ def main():
     recipient_email = contact['email']
     
     if recipient_email == '':
-      logging.error(f'Contact email for {recipient_name} cannot be blank. Skipping...')
+      logger.error(f'Contact email for {recipient_name} cannot be blank. Skipping...')
       continue
     else:
       recipient_email = contact['email']
 
-    logging.info(f"Sending email to {recipient_name} at {recipient_email}")
+    logger.info(f"Sending email to {recipient_name} at {recipient_email}")
 
     # MESSAGE
     message = MIMEMultipart("alternative")
@@ -149,9 +151,9 @@ def main():
         server.sendmail(
             sender_email, recipient_email, message.as_string()
         )
-      logging.debug(f'Email to {recipient_name} was sent.')
+      logger.debug(f'Email to {recipient_name} was sent.')
     except smtplib.SMTPRecipientsRefused as e:
-      logging.error(f'RecipientsRefused: {recipient_name}: {e}')
+      logger.error(f'RecipientsRefused: {recipient_name}: {e}')
 
   return None
 
