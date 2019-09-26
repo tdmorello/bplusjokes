@@ -4,9 +4,9 @@ from get_random_content import get_random_nouns, get_random_words, get_random_th
 import random
 import requests
 from time import sleep
-
-
 import logging
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s : %(levelname)s : %(message)s')
 logger = logging.getLogger(__name__)
 
 def check_connection(url):
@@ -24,6 +24,11 @@ def check_connection(url):
             logger.debug(f'Did not get 200 response. Trying agin in 5s.')
             sleep(5)
     return None
+    
+def sleep_five():
+    for i in range(1,6):
+        print(i)
+        sleep(i)
 
 def get_random_slogan(search_term):
     """Returns a list of slogans from a given term using shopify's slogan maker"""
@@ -31,22 +36,14 @@ def get_random_slogan(search_term):
     url = 'https://www.shopify.com/tools/slogan-maker'
     
     check_connection(url)
-    
+
     # Submit form on website
     browser = mechanicalsoup.StatefulBrowser(soup_config={'features': 'html.parser'})
-    
-    while True:
-        try:
-            browser.open(url)
-            break
-        except mechanicalsoup.utils.LinkNotFoundError as e:
-            logger.debug(f'Browser error... Trying agin in 5s.')
-            sleep(5)
-            
+    browser.open(url)
     browser.select_form('form[action="/tools/slogan-maker/create"]')
     browser['term'] = search_term
     response = browser.submit_selected()
-
+    
     # Parse response
     raw_html = response.text
     soup = BeautifulSoup(raw_html, 'html.parser') 
@@ -56,7 +53,10 @@ def get_random_slogan(search_term):
         slogans.append(slogan.text.strip())
 
     random_slogan = random.choice(slogans)
+    sleep_five()
     return random_slogan
 
 if __name__ == '__main__':
-    print(get_random_slogan(get_random_nouns()))
+    for _ in range(10):
+        get_random_slogan(get_random_nouns())
+
