@@ -6,18 +6,18 @@ import datetime
 import logging
 import sys
 import argparse
+from time import sleep
 
 from get_random_slogan import get_random_slogan
 from get_random_content import get_random_noun
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s : %(levelname)s : %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(message)s')
 
 logger = logging.getLogger(__name__)
 
 # TODO:
-# - If there's no internet connection, try again in a little bit
 # - Add a check that every joke has a send-date
-# - Add logging verbosity
+# - Add logging verbosity to sys args
 
 
 def get_csv_content(csv_file):
@@ -154,8 +154,10 @@ def main():
       logger.debug(f'Email to {recipient_name} was sent.')
     except smtplib.SMTPRecipientsRefused as e:
       logger.error(f'RecipientsRefused: {recipient_name}: {e}')
+    
+    sleep(15)
 
   return None
 
 if __name__ == '__main__':
-    main()  
+    main()

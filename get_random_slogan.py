@@ -21,8 +21,8 @@ def check_connection(url):
         if resp.status_code == 200:
             break
         else:
-            logger.debug(f'Did not get 200 response. Trying agin in 10s.')
-            sleep(10)
+            logger.debug(f'Did not get 200 response. Trying agin in 5s.')
+            sleep(5)
     return None
 
 def get_random_slogan(search_term):
@@ -32,18 +32,20 @@ def get_random_slogan(search_term):
     
     check_connection(url)
     
+    # Submit form on website
+    browser = mechanicalsoup.StatefulBrowser(soup_config={'features': 'html.parser'})
+    
     while True:
         try:
-            # Submit form on website
-            browser = mechanicalsoup.StatefulBrowser(soup_config={'features': 'html.parser'})
             browser.open(url)
-            browser.select_form('form[action="/tools/slogan-maker/create"]')
-            browser['term'] = search_term
-            response = browser.submit_selected()
             break
         except mechanicalsoup.utils.LinkNotFoundError as e:
-            logger.debug(f'Browser error... Trying agin in 10s.')
-            sleep(10)
+            logger.debug(f'Browser error... Trying agin in 5s.')
+            sleep(5)
+            
+    browser.select_form('form[action="/tools/slogan-maker/create"]')
+    browser['term'] = search_term
+    response = browser.submit_selected()
 
     # Parse response
     raw_html = response.text
