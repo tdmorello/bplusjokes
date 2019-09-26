@@ -9,7 +9,7 @@ import argparse
 from time import sleep
 
 from get_random_slogan import get_random_slogan
-from get_random_content import get_random_noun
+from get_random_slogans import get_random_slogans
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s : %(levelname)s : %(message)s')
 
@@ -71,10 +71,17 @@ def main():
     contacts = get_csv_content("contacts_test.csv")
   else:
     contacts = get_csv_content("contacts.csv")
+    
+  # Prepare business slogans
+  num_slogans = len(contacts)
+  logger.debug(f'Retrieving {num_slogans} slogans')
+  slogans_iterator = iter(get_random_slogans(num_slogans))
+  
 
   # Send mail
   
-  for contact in contacts:
+  for i,contact in enumerate(contacts):
+    slogan = next(slogans_iterator)
     recipient_name = contact['name']
     recipient_email = contact['email']
     
@@ -102,7 +109,7 @@ def main():
     {joke_punchline}
 
     Looking to start a new business? Consider this slogan!<br>
-    {get_random_slogan(get_random_noun())}
+    {slogan}
     """
 
     html = f"""\
@@ -122,7 +129,7 @@ def main():
         <h1>#BusinessSection</h1>
         <p>
           Looking to start a new business? Consider this slogan!<br><br>
-          <b>{get_random_slogan(get_random_noun())}</b>
+          <b>{slogan}</b>
         </p>
         <br><br>
         <p>
@@ -151,11 +158,9 @@ def main():
         server.sendmail(
             sender_email, recipient_email, message.as_string()
         )
-      logger.debug(f'Email to {recipient_name} was sent.')
+      logger.debug(f'Email {i} to {recipient_name} was sent.')
     except smtplib.SMTPRecipientsRefused as e:
       logger.error(f'RecipientsRefused: {recipient_name}: {e}')
-    
-    sleep(15)
 
   return None
 
