@@ -102,7 +102,7 @@ def main():
 
     # Create the plain-text and HTML version of your message
     text = f"""\
-    Good day {recipient_name},
+    Yo {recipient_name}!
     Thank you for your irreversible subscription to Dog Joke of the Day.
     Here's your dog joke of the day!
 
@@ -119,7 +119,7 @@ def main():
     html = f"""\
     <html>
       <body>
-        <p>Good day {recipient_name},<br><br>
+        <p>Yo {recipient_name}!<br><br>
           Thank you for your irreversible subscription to Dog Joke of the Day.<br>
           Here's your dog joke of the day!
         </p>
@@ -150,7 +150,7 @@ def main():
         
         <p>
         Already have a Dog Joke of the Day provider?
-        <a href="https://www.google.com/search?q=how+to+unsubscribe+from+dog+joke+of+the+day">Click here to unsubscribe</a>
+        <a href="http://www.stealthboats.com">Click here to unsubscribe</a>
         </p>
       </body>
     </html>
