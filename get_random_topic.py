@@ -1,8 +1,9 @@
-# https://www.conversationstarters.com/generator.php
-
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_random_topic():
     status_code = 0
@@ -13,4 +14,3 @@ def get_random_topic():
 
     soup = BeautifulSoup(resp.text, features="lxml")
     return soup.getText()
-

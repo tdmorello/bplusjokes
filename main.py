@@ -109,8 +109,11 @@ def main():
     {joke_setup}
     {joke_punchline}
 
-    Looking to start a new business? Consider this slogan!<br>
+    Looking to start a new business? Consider this slogan!
     {slogan}
+    
+    Making friends can be hard! Here's a conversation starter to try today.
+    {get_random_topic()}
     """
 
     html = f"""\
@@ -121,31 +124,34 @@ def main():
           Here's your dog joke of the day!
         </p>
         <br>
+        
         <h1>#JokeSection</h1>
         <p>
           <strong>{joke_setup}</strong><br><br>
           <i>{joke_punchline}</i>
         </p>
-
         <br>
+        
         <h1>#BusinessSection</h1>
         <p>
           Looking to start a new business? Consider this slogan!<br><br>
           <b>{slogan}</b>
         </p>
         <br><br>
-        <p>
+
         
         <h1>#SocialSection</h1>
         <p>
-          Making friends can be hard! Here's a conversation start to try today.<br><br>
+          Making friends can be hard! Here's a conversation starter to try today.<br><br>
           <b>{get_random_topic()}</b>
         </p>
         <br><br>
+        
+        
         <p>
-
-          Already have a Dog Joke of the Day provider?
-          <a href="https://www.google.com/search?q=how+to+unsubscribe+from+dog+joke+of+the+day">Click here to unsubscribe</a>
+        Already have a Dog Joke of the Day provider?
+        <a href="https://www.google.com/search?q=how+to+unsubscribe+from+dog+joke+of+the+day">Click here to unsubscribe</a>
+        </p>
       </body>
     </html>
     """
