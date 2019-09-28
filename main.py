@@ -7,6 +7,8 @@ import logging
 import sys
 import argparse
 from time import sleep
+import json
+import random
 
 from get_random_slogan import get_random_slogan
 from get_random_slogans import get_random_slogans
@@ -45,6 +47,12 @@ def find_todays_joke(jokes):
       return joke
   logger.error("No jokes for today were found.")
   sys.exit()
+  
+def get_random_projects(count):
+  with open('./data/random_projects.json', mode='r') as jsonfile:
+    random_projects = json.load(jsonfile)
+    projects = random.sample(random_projects,count)
+    return projects
 
 def main():
   # Get args
@@ -78,6 +86,9 @@ def main():
   logger.debug(f'Retrieving {num_slogans} slogans')
   slogans_iterator = iter(get_random_slogans(num_slogans))
   
+  # Prepare projects
+  projects = get_random_projects(len(contacts))
+  print(projects)
 
   # Send mail
   
@@ -119,8 +130,8 @@ def main():
     html = f"""\
     <html>
       <body>
-        <p>Yo {recipient_name}!<br><br>
-          Thank you for your irreversible subscription to Dog Joke of the Day.<br>
+        <p>To whom it may concern:<br><br>
+          Thank you for your everlasting subscription to Dog Joke of the Day.<br>
           Here's your dog joke of the day!
         </p>
         <br>
@@ -129,6 +140,13 @@ def main():
         <p>
           <strong>{joke_setup}</strong><br><br>
           <i>{joke_punchline}</i>
+        </p>
+        <br>
+        
+        <h1>#KidsSection</h1>
+        <p>
+          Bored? Here's a project to do this weekend!<br><br>
+          <a href="{projects[i]['link']}">{projects[i]['title']}</a>
         </p>
         <br>
         
@@ -150,7 +168,7 @@ def main():
         
         <p>
         Already have a Dog Joke of the Day provider?
-        <a href="http://www.stealthboats.com">Click here to unsubscribe</a>
+        <a href="http://endless.horse">Click here to unsubscribe</a>
         </p>
       </body>
     </html>

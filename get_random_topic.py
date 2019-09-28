@@ -14,3 +14,6 @@ def get_random_topic():
 
     soup = BeautifulSoup(resp.text, features="lxml")
     return soup.getText()
+
+if __name__ == '__main__':
+    print(get_random_topic())
